@@ -817,5 +817,15 @@ def run():
             os._exit(1)
 
 
+# Vercel Python entrypoint.
+# Vercel imports app.py as a WSGI function module, so expose the web.py
+# application at module scope. The normal server path above remains unchanged.
+try:
+    from channel.web.web_channel import build_app as _build_web_app
+    app = _build_web_app().wsgifunc()
+except Exception:
+    app = None
+
+
 if __name__ == "__main__":
     run()
